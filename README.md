@@ -3,7 +3,7 @@
 A clean, responsive blog about AI workflows and productivity tools.
 
 ## 🌐 Live Site
-**[rohithraj46.github.io/justBlogs](https://Rohithraj46.github.io/justBlogs/my-ai-workflow.html)**
+**[rohithraj46.github.io/justBlogs](https://Rohithraj46.github.io/justBlogs)**
 
 ## 📖 What's Inside
 - Modern HTML/CSS design with elegant typography

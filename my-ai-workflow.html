@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Only Way I Work: My Unconventional AI Workflow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+        
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 50%, #ffa726 100%);
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="grad1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:%23ffffff;stop-opacity:0.1"/><stop offset="100%" style="stop-color:%23ffffff;stop-opacity:0"/></radialGradient></defs><circle cx="200" cy="300" r="150" fill="url(%23grad1)"/><circle cx="800" cy="200" r="100" fill="url(%23grad1)"/><circle cx="600" cy="700" r="200" fill="url(%23grad1)"/></svg>') no-repeat center center;
+            background-size: cover;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+            z-index: 2;
+            position: relative;
+            padding: 0 40px;
+        }
+        
+        .hero-category {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+        
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 50px;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
+        }
+        
+        .scroll-indicator::before {
+            content: '';
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            display: block;
+            margin: 0 auto 10px;
+            animation: scrollAnimation 2s infinite;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scrollAnimation {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+        
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ff6b35;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #ffa726);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .author-details h4 {
+            color: #2d2d2d;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .author-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .article-stats {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .intro-section {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #333333;
+            margin-bottom: 50px;
+            max-width: 750px;
+            font-weight: 400;
+            letter-spacing: -0.005em;
+        }
+        
+        .intro-section p {
+            margin-bottom: 24px;
+        }
+        
+        .intro-section p:first-child::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1;
+            float: left;
+            margin: 8px 12px 0 0;
+            color: #ff6b35;
+            text-shadow: 2px 2px 4px rgba(255, 107, 53, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa726 100%);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .feature-image {
+            margin: 50px 0;
+            text-align: center;
+        }
+        
+        .feature-image img {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 40px 80px rgba(255, 107, 53, 0.2);
+            border: 3px solid #ff6b35;
+        }
+        
+        .tools-section {
+            margin: 60px 0;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1a1a1a;
+            position: relative;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b35, #ffa726);
+            border-radius: 2px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .tool-card {
+            background: #ffffff;
+            border: 3px solid #ff6b35;
+            border-radius: 24px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.1);
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff6b35, #ffa726, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            background: #fff8f5;
+            border-color: #ffa726;
+            box-shadow: 0 40px 80px rgba(255, 107, 53, 0.2);
+        }
+        
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .tool-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa726 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .tool-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+        
+        .tool-image {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .tool-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 2px solid #ff6b35;
+        }
+        
+        .tool-description {
+            color: #4a4a4a;
+            line-height: 1.75;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: -0.005em;
+        }
+        
+        .tool-description p {
+            margin-bottom: 24px;
+        }
+        
+        .conclusion-section {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa726 100%);
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .conclusion-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+        
+        .conclusion-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conclusion-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        
+        .conclusion-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .back-section {
+            text-align: center;
+            margin: 50px 0 30px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #ff6b35 0%, #ffa726 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 30px 60px rgba(255, 107, 53, 0.4);
+        }
+        
+        .professional-footer {
+            background: #4a4a4a;
+            color: #ffffff;
+            padding: 50px 0 30px;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .social-icon {
+            color: #cccccc;
+            transition: color 0.3s ease;
+            padding: 8px;
+        }
+        
+        .social-icon:hover {
+            color: #ff6b35;
+        }
+        
+        .author-info-footer h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        
+        .author-title {
+            font-size: 1.05rem;
+            color: #cccccc;
+            margin-bottom: 8px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .author-email {
+            font-size: 1rem;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: #999999;
+            margin-bottom: 5px;
+        }
+        
+        .powered-by {
+            font-size: 0.9rem;
+            color: #999999;
+            font-style: italic;
+        }
+        
+        .footer-right {
+            display: flex;
+            gap: 60px;
+            justify-content: flex-end;
+        }
+        
+        .footer-links h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links ul li a {
+            color: #cccccc;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links ul li a:hover {
+            color: #ff6b35;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                padding: 0 20px;
+            }
+            
+            .footer-right {
+                justify-content: flex-start;
+                gap: 40px;
+            }
+            
+            .professional-footer {
+                padding: 50px 0 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 0 20px;
+            }
+            
+            .main-content {
+                padding: 60px 20px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .tool-card {
+                padding: 30px;
+            }
+            
+            .conclusion-section {
+                padding: 50px 30px;
+                margin: 60px 0;
+            }
+            
+            .content-details {
+                padding: 50px 30px;
+            }
+            
+            .content-details-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .contact-links {
+                gap: 15px;
+            }
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #ff6b35, #ffa726);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        .floating-element:nth-child(1) { left: 10%; animation-delay: -2s; }
+        .floating-element:nth-child(2) { left: 20%; animation-delay: -4s; }
+        .floating-element:nth-child(3) { left: 30%; animation-delay: -6s; }
+        .floating-element:nth-child(4) { left: 40%; animation-delay: -8s; }
+        .floating-element:nth-child(5) { left: 50%; animation-delay: -10s; }
+        .floating-element:nth-child(6) { left: 60%; animation-delay: -12s; }
+        .floating-element:nth-child(7) { left: 70%; animation-delay: -14s; }
+        .floating-element:nth-child(8) { left: 80%; animation-delay: -16s; }
+        .floating-element:nth-child(9) { left: 90%; animation-delay: -18s; }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-category">AI Workflow</div>
+            <h1 class="hero-title">The Only Way I Work</h1>
+            <p class="hero-subtitle">My Unconventional AI Workflow</p>
+        </div>
+        <div class="scroll-indicator">
+            <span style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">Scroll to explore</span>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="article-meta">
+            <div class="author-info">
+                <div class="author-avatar">R</div>
+                <div class="author-details">
+                    <h4>Rohith Raj</h4>
+                    <p>AI Researcher & Developer</p>
+                </div>
+            </div>
+            <div class="article-stats">
+                <span>8 min read</span>
+                <span>•</span>
+                <span>Aug 16, 2025</span>
+            </div>
+        </div>
+
+        <div class="intro-section">
+            <p>Everyone talks about AI as if it's a genie in a lamp—a magical black box that just grants wishes. We hear about how it wrote an essay or created a masterpiece, as if we, the humans, are just passive observers. Then you have the other crowd, the ones who say you have to learn every line of code and master every technical assumption to truly get it.</p>
+            
+            <p><strong>I think both approaches are profoundly wrong.</strong></p>
+            
+            <p>My philosophy is different. Thanks to a few lucky breaks and student subscriptions, I've had the chance to get hands-on with some of the best models out there. And what I've learned is this: <span class="highlight">the best way to understand an AI model isn't just to read about it, but to truly use it</span>.</p>
+        </div>
+
+        <div class="feature-image">
+            <img src="images/ai-workflow-diagram.png" alt="AI Workflow Overview" />
+        </div>
+
+        <section class="tools-section" id="tools">
+            <h2 class="section-title">My AI Arsenal</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🏗️</div>
+                        <h3 class="tool-title">Claude: The Technical Architect</h3>
+                    </div>
+                    
+                    <div class="tool-image">
+                        <img src="images/claude-interface.png" alt="Claude Interface" />
+                    </div>
+                    
+                    <div class="tool-description">
+                        <p>When a creative idea hits, my mind is already in motion. The last thing I want to do is get bogged down in the technical minutiae that follow. That's where Claude comes in.</p>
+                        
+                        <p>It's my technical architect, perfectly suited for the detailed, foundational work that needs to be done flawlessly. I give Claude a concept, and it handles the logical structure, the intricate explanations, and all the "how-to" details.</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">🔍</div>
+                        <h3 class="tool-title">Perplexity: The Instant Researcher</h3>
+                    </div>
+                    
+                    <div class="tool-image">
+                        <img src="images/perplexity-research.png" alt="Perplexity Research" />
+                    </div>
+                    
+                    <div class="tool-description">
+                        <p>I am, by nature, impatient. My time is for thinking, not for wading through a sea of search results. Perplexity is the solution to that.</p>
+                        
+                        <p>When a question pops into my head, I can simply speak it aloud and get a concise summary from multiple sources in seconds. The voice feature allows me to stay in a state of high-level thought while Perplexity handles the research.</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">✨</div>
+                        <h3 class="tool-title">Gemini: The Creative Mirror</h3>
+                    </div>
+                    
+                    <div class="tool-image">
+                        <img src="images/gemini-creative.png" alt="Gemini Creative Process" />
+                    </div>
+                    
+                    <div class="tool-description">
+                        <p>My most powerful tool isn't something that does work for me; it's something that thinks with me. I use Gemini as a creative mirror.</p>
+                        
+                        <p>I'll pitch it a half-formed idea, and it will reflect back a new angle, a clever twist, or a powerful new phrase I hadn't considered. The conversation is a constant refinement process, gathering insights I need to define what the next generation of AI will look like.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="conclusion-section">
+            <div class="conclusion-content">
+                <h2 class="conclusion-title">Building the Future</h2>
+                <p class="conclusion-text">This isn't just about using a service. It's about a strategic workflow built around my own unique requirements. I'm not just benefiting from AI; I'm actively figuring out how to build the blueprints for the AI of the future.</p>
+            </div>
+        </div>
+
+        <div class="back-section">
+            <a href="index.html" class="back-btn">
+                ← Back to Blog Home
+            </a>
+        </div>
+    </main>
+
+    <footer class="professional-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="social-icons">
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="author-info-footer">
+                    <h3 class="author-name">Rohith Raj Ijjurouthu</h3>
+                    <p class="author-title">Software Development Engineer</p>
+                    <p class="author-email">rohithraj046@gmail.com</p>
+                    <p class="copyright">© 2025 by Rohith Raj Ijjurouthu.</p>
+                    <p class="powered-by">Powered by passion for AI innovation</p>
+                </div>
+            </div>
+            
+            <div class="footer-right">
+                <div class="footer-links">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="index.html">Blog Home</a></li>
+                        <li><a href="#tools">AI Tools</a></li>
+                        <li><a href="#workflow">My Workflow</a></li>
+                        <li><a href="#about">About Me</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="mailto:rohithraj046@gmail.com">Email Me</a></li>
+                        <li><a href="#linkedin">LinkedIn</a></li>
+                        <li><a href="#github">GitHub</a></li>
+                        <li><a href="#twitter">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
